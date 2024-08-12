@@ -9,6 +9,8 @@ drawing_utils = mp.solutions.drawing_utils
 
 screen_width, screen_height = pyautogui.size()
 
+index_y = 0
+
 while True:
     _, video = cap.read()
     video = cv2.flip(video,1)
@@ -25,7 +27,17 @@ while True:
                 y = int(landmark.y*video_height)
                 if id==8:
                     cv2.circle(img=video,center=(x,y),radius=10,color=(0,255,255))
-                    pyautogui.moveTo(x,y)
+                    index_x = screen_width/video_width *x
+                    index_y = screen_height/video_height *y
+                    pyautogui.moveTo(index_x,index_y)
+                if id==4:
+                    cv2.circle(img=video,center=(x,y),radius=10,color=(0,255,255))
+                    thum_x = screen_width/video_width *x
+                    thum_y = screen_height/video_height *y
+                    if abs(index_y - thum_y)<30:
+                        print("click")
+                        pyautogui.click()
+                        pyautogui.sleep(1)
     cv2.imshow('Virtual Mouse',video)
     cv2.waitKey(1)
 
